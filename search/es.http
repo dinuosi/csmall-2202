@@ -1,0 +1,117 @@
+### 注释和分隔符,每次编写请求前,都要先编写3个#
+GET http://localhost:9200
+
+### ES分词测试  analyze(分析)
+POST http://localhost:9200/_analyze
+Content-Type: application/json
+
+{
+  "text": "北京顺利举办了冬季奥林匹克运动会",
+  "analyzer": "ik_max_word"
+}
+
+### 创建 index
+PUT http://localhost:9200/questions
+
+### 删除一个Index
+DELETE http://localhost:9200/questions
+
+### 设置index中的文档属性采用ik分词
+POST http://localhost:9200/questions/_mapping
+Content-Type: application/json
+
+{
+  "properties": {
+    "title": {
+      "type": "text",
+      "analyzer": "ik_max_word",
+      "search_analyzer": "ik_max_word"
+    },
+    "content": {
+      "type": "text",
+      "analyzer": "ik_max_word",
+      "search_analyzer": "ik_max_word"
+    }
+  }
+}
+
+
+### questions 中添加文档
+POST http://localhost:9200/questions/_create/1
+Content-Type: application/json
+
+{
+  "id":1,
+  "title":"Java基本数据类型有哪些",
+  "content":"面时候为啥要问基本类型这么简单问题呀，我们要如何回答呢？"
+}
+
+### questions 中添加文档
+POST http://localhost:9200/questions/_create/2
+Content-Type: application/json
+
+{
+  "id":2,
+  "title":"int类型的范围",
+  "content":"为啥要了解int类型的范围呢？"
+}
+
+### questions 中添加文档
+POST http://localhost:9200/questions/_create/3
+Content-Type: application/json
+
+{
+  "id":3,
+  "title":"常用集合类有哪些",
+  "content":"为啥企业经常问集合呀？该如何回复呢"
+}
+
+### questions 中添加文档
+POST http://localhost:9200/questions/_create/4
+Content-Type: application/json
+
+{
+  "id":4,
+  "title":"线程的run方法和start方法有啥区别",
+  "content":"run方法可以执行线程的计算过程， start也可以执行线程的计算过程，用途一样么？"
+}
+
+### 更新questions索引中的文档
+POST http://localhost:9200/questions/_doc/4/_update
+Content-Type: application/json
+
+{
+  "doc": {
+    "title": "Java线程的run方法和start方法有啥区别"
+  }
+}
+
+### 删除questions中的一个文档
+DELETE http://localhost:9200/questions/_doc/2
+
+### 查询数据
+GET http://localhost:9200/questions/_doc/4
+
+### 搜索 ES
+POST http://localhost:9200/questions/_search
+Content-Type: application/json
+
+{
+  "query": { "match": {"title": "类型" } }
+}
+
+
+### 多字段搜索
+POST http://localhost:9200/questions/_search
+Content-Type: application/json
+
+{
+  "query": {
+    "bool": {
+      "must": [
+        { "match": { "title":  "java类型" }},
+        { "match": { "content": "java类型"}}
+      ]
+    }
+  }
+}

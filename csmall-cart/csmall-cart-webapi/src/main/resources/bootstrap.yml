@@ -1,0 +1,12 @@
+spring:
+  cloud:
+    nacos:
+      config:
+        #  指定配置中心的位置
+        server-addr: 192.168.137.150:8848
+        # 指定配置文件所在的组名(命名空间默认public不需要指定)
+        group: DEFAULT_GROUP
+        # 设置配置文件的后缀名
+        # 默认情况下会加载[服务器名].[后缀名]为DataId的配置
+        # 当前项目名称为nacos-cart所以默认加载的DataId为:nacos-cart.yaml
+        file-extension: yaml

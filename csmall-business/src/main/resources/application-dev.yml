@@ -1,0 +1,30 @@
+spring:
+  application:
+    # 当前Springboot项目的名称,用作注册中心服务的名称
+    name: nacos-business
+  cloud:
+    nacos:
+      discovery:
+        # 定义nacos运行的路径
+        server-addr: localhost:8848
+        # ephemeral设置当前项目启动时注册到nacos的类型 true(默认):临时实例 false:永久实例
+        ephemeral: true
+    sentinel:
+      transport:
+        dashboard: localhost:8080
+        port: 8722 # 8721被Stock使用,要换不一样的
+dubbo:
+  protocol:
+    port: -1 # 设置Dubbo服务调用的端口 设置-1能够实现动态自动设置合适端口,生成规则是从20880开始递增
+    name: dubbo # 设置端口名称,一般固定就叫dubbo
+  registry:
+    address: nacos://localhost:8848 # 配置当前Dubbo注册中心的类型和地址
+  consumer:
+    check: false # 设置为false表示当前项目启动时,不检查要调用的远程服务是否可用,避免报错
+seata:
+  tx-service-group: csmall_group #定义分组名称
+  service:
+    vgroup-mapping:
+      csmall_group: default  # 使用seata默认事务配置
+    grouplist:
+      default: localhost:8091 # 8091是seata默认的地址

@@ -1,0 +1,30 @@
+spring:
+  kafka:
+    # 定义kafka的位置
+    bootstrap-servers: localhost:9092
+    # 话题的分组名称,是必须配置的
+    # 为了区分当前项目和其他项目使用的,防止了不同项目相同话题的干扰或错乱
+    # 本质是在话题名称前添加项目名称为前缀来防止的
+    consumer:
+      group-id: csmall
+  application:
+    name: nacos-cart
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 192.168.137.150:8848
+dubbo:
+  protocol:
+    port: -1
+    name: dubbo
+  registry:
+    address: nacos://192.168.137.150:8848
+  consumer:
+    check: false
+seata:
+  tx-service-group: csmall_group #定义分组名称
+  service:
+    vgroup-mapping:
+      csmall_group: default  # 使用seata默认事务配置
+    grouplist:
+      default: localhost:8091 # 8091是seata默认的地址

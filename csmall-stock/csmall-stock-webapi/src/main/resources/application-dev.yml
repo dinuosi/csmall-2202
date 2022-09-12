@@ -1,0 +1,41 @@
+spring:
+  redis:
+    host: 192.168.137.150
+    port: 6379
+    password:
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: guest
+    password: guest
+    virtual-host: /
+  datasource:
+    url: jdbc:mysql://localhost:3306/csmall_db?useSSL=false&useUnicode=true&characterEncoding=utf-8&serverTimezone=Asia/Shanghai&allowMultiQueries=true
+    username: root
+    password: root
+  application:
+    name: nacos-stock
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 192.168.137.150:8848
+    sentinel:
+      transport:
+        dashboard: localhost:8080 # 配置Sentinel仪表台的位置
+        port: 8721 # 真正执行限流的端口也要设置一下,注意这个端口其他微服务项目不能相同
+
+dubbo:
+  protocol:
+    port: -1 # 设置Dubbo服务调用的端口 设置-1能够实现动态自动设置合适端口,生成规则是从20880开始递增
+    name: dubbo # 设置端口名称,一般固定就叫dubbo
+  registry:
+    address: nacos://192.168.137.150:8848 # 配置当前Dubbo注册中心的类型和地址
+  consumer:
+    check: false # 设置为false表示当前项目启动时,不检查要调用的远程服务是否可用,避免报错
+seata:
+  tx-service-group: csmall_group #定义分组名称
+  service:
+    vgroup-mapping:
+      csmall_group: default  # 使用seata默认事务配置
+    grouplist:
+      default: localhost:8091 # 8091是seata默认的地址
